@@ -1,11 +1,11 @@
-name: Despliegue prueba Vercel y JSDoc
+name: Despliegue Pages
 
 on:
   push:
     branches: 
-      - main
-      - deploy
-      - release
+    - deploy
+    - main
+    - release
     workflow_dispatch:
 
 jobs:
@@ -22,7 +22,7 @@ jobs:
         run: npm install
       - name: Ejecutar Pruebas Unitarias
         run: npm run test
-
+        
   deploy:
     needs: tests
     runs-on: ubuntu-latest
@@ -36,17 +36,29 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Instalar dependencias (incluyendo JSDoc si es local)
+      - name: Instalar dependencias para JSDoc
         run: npm install
 
       - name: Generar Documentación JSDoc
-        run: npm run vercel-build
+        # Esto crea la carpeta 'docs' en la raíz del repositorio
+        run: npm run docs
 
-      - name: Instalar Vercel CLI
-        run: npm install --global vercel@latest
+      - name: Mover y Unificar Archivos de Despliegue
+        run: |
+          # 1. Crea la carpeta temporal de destino
+          mkdir page_root
+          
+          # 2. Copia todos los archivos de tu carpeta 'src/' a la raíz de la página
+          cp -R src/* page_root/
+          
+          # 3. Mueve la carpeta de documentación JSDoc (solo una vez)
+          mv docs page_root/docs/
 
-      - name: Desplegar en Vercel
-        run: vercel --prod --token ${{ secrets.VERCEL_TOKEN }}
-        env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          # 4. Crea el archivo CNAME con tu dominio personalizado
+          echo "pruebapages.frandaw.com" > page_root/CNAME 
+          
+      - name: Desplegar a GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./page_root
