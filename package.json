@@ -1,0 +1,30 @@
+{
+  "name": "ejercicio-web",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "docs": "node node_modules/jsdoc/jsdoc.js src/app.js -d docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FranJunior23/ejercicio-web.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/FranJunior23/ejercicio-web/issues"
+  },
+  "homepage": "https://github.com/FranJunior23/ejercicio-web#readme",
+  "dependencies": {
+    "jest": "^30.2.0",
+    "jsdoc": "^4.0.5"
+  }
+}
