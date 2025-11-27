@@ -9,7 +9,8 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "vercel-build": "node node_modules/jsdoc/jsdoc.js src/app.js -d docs"
   },
   "repository": {
     "type": "git",
