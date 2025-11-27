@@ -1,0 +1,64 @@
+name: Despliegue Pages
+
+on:
+  push:
+    branches: 
+    - deploy
+    - main
+    - release
+    workflow_dispatch:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v4
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Instalar dependencias
+        run: npm install
+      - name: Ejecutar Pruebas Unitarias
+        run: npm run test
+        
+  deploy:
+    needs: tests
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v4
+        
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Instalar dependencias para JSDoc
+        run: npm install
+
+      - name: Generar Documentación JSDoc
+        # Esto crea la carpeta 'docs' en la raíz del repositorio
+        run: npm run docs
+
+      - name: Mover y Unificar Archivos de Despliegue
+        run: |
+          # 1. Crea la carpeta temporal de destino
+          mkdir page_root
+          
+          # 2. Copia todos los archivos de tu carpeta 'src/' a la raíz de la página
+          cp -R src/* page_root/
+          
+          # 3. Mueve la carpeta de documentación JSDoc (solo una vez)
+          mv docs page_root/docs/
+
+          # 4. Crea el archivo CNAME con tu dominio personalizado
+          echo "pruebapages.frandaw.com" > page_root/CNAME 
+          
+      - name: Desplegar a GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./page_root
