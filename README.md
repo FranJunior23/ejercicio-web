@@ -48,3 +48,16 @@ Proyecto Lista de Lectura
 
 
 ---
+### Conexión con dominio de IONOS
+En IONOS accedemos al apartado de DNS de nuestro dominio, añadimos un CNAME que apunte a franjjl05.github.io.(en mi caso)
+Y tiene que quedarnos igual que lo que hemos puesto en el deploy.
+Lo pegamos en el apartado de custom domain y listo.
+
+Una vez todo correcto y el workflow okey podremos acceder a nuestra página.
+
+### Como acceder a la visualizacion de la página desplegada en IONOS
+Con este primer enlace accedemos a la página
+http://despliegueexamen.frandaw.com
+
+Con este otro accedemos a la documentación generada automáticamente
+http://despliegueexamen.frandaw.com/docs/
